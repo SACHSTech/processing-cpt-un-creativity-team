@@ -2,12 +2,14 @@ import processing.core.PApplet;
 
 public class Sketch2 extends PApplet {
 	
-	
+	int playerX = 200;
+  int playerY = 400;
+
   /**
    * Called once at the beginning of execution, put your size all in this method
    */
   public void settings() {
-	// put your size call here
+	   // screen size
     size(800, 800);
   }
 
@@ -23,15 +25,48 @@ public class Sketch2 extends PApplet {
    * Called repeatedly, anything drawn to the screen goes here
    */
   public void draw() {
-	  
-	// sample code, delete this stuff
-    stroke(128);
-    line(0, 0, width, height);  
+	  background(255);
 
-    stroke(0);
-    line(50, 125, 70, 50);  
+    fill(0, 0, 139); // Blue
+    rect(playerX, playerY, 25, 25); // Draws the player
+
+     // player boundries
+    if (playerX < 0) {
+      playerX = 0;
+    }
+    if (playerY < 0) {
+      playerY = 0;
+    }
+    if (playerX > width-25) {
+      playerX = width-25;
+    }
+    if (playerY > height-25) {
+      playerY = height-25;
+    }
+
   }
   
   // other methods down here
+
+  /**
+  * Detects if a key on the keyboard is clicked
+  * @return if further keys are clicked it executes a condition
+  */
+  public void keyPressed() {
+     // Shift the player
+    if (key == 'w') {
+      playerY-=20; // Up
+    }
+    if (key == 's') {
+      playerY+=20; // Down
+    }
+    if (key == 'a') {
+      playerX-=20; // Left
+    }
+    if (key == 'd') {
+      playerX+=20; // Right
+    }
+   
+ }
   
 }

@@ -29,7 +29,21 @@ public class Sketch1 extends PApplet {
 
     fill(0, 0, 139); // Blue
     rect(playerX, playerY, 25, 25); // Draws the player
-    
+
+     // player boundries
+    if (playerX < 0) {
+      playerX = 0;
+    }
+    if (playerY < 0) {
+      playerY = 0;
+    }
+    if (playerX > width-25) {
+      playerX = width-25;
+    }
+    if (playerY > height-25) {
+      playerY = height-25;
+    }
+
   }
   
   // other methods down here
@@ -41,16 +55,16 @@ public class Sketch1 extends PApplet {
   public void keyPressed() {
      // Shift the player
     if (key == 'w') {
-      playerY-=20;
+      playerY-=20; // Up
     }
     if (key == 's') {
-      playerY+=20;
+      playerY+=20; // Down
     }
     if (key == 'a') {
-      playerX-=20;
+      playerX-=20; // Left
     }
     if (key == 'd') {
-      playerX+=20;
+      playerX+=20; // Right
     }
    
  }
