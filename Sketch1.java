@@ -2,13 +2,15 @@ import processing.core.PApplet;
 
 public class Sketch1 extends PApplet {
 	
-	
+	int playerX = 200;
+  int playerY = 400;
+
   /**
    * Called once at the beginning of execution, put your size all in this method
    */
   public void settings() {
-	// put your size call here
-    size(400, 400);
+	   // screen size
+    size(800, 800);
   }
 
   /** 
@@ -16,21 +18,41 @@ public class Sketch1 extends PApplet {
    * values here i.e background, stroke, fill etc.
    */
   public void setup() {
-    background(210, 255, 173);
+    background(255);
   }
 
   /**
    * Called repeatedly, anything drawn to the screen goes here
    */
   public void draw() {
-	  
-	// sample code, delete this stuff
-    stroke(128);
-    line(150, 25, 270, 350);  
+	  background(255);
 
-    stroke(255);
-    line(50, 125, 70, 50);  
+    fill(0, 0, 139); // Blue
+    rect(playerX, playerY, 25, 25); // Draws the player
+    
   }
   
-  // define other methods down here.
+  // other methods down here
+
+  /**
+  * Detects if a key on the keyboard is clicked
+  * @return if further keys are clicked it executes a condition
+  */
+  public void keyPressed() {
+     // Shift the player
+    if (key == 'w') {
+      playerY-=20;
+    }
+    if (key == 's') {
+      playerY+=20;
+    }
+    if (key == 'a') {
+      playerX-=20;
+    }
+    if (key == 'd') {
+      playerX+=20;
+    }
+   
+ }
+  
 }
