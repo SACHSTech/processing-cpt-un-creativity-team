@@ -1,9 +1,16 @@
 import processing.core.PApplet;
+import processing.core.PImage;
 
 public class Sketch extends PApplet {
+
+  PImage imgBackground;
+  PImage imgShip;
+  PImage imgLives;
 	
 	int playerX = 200;
   int playerY = 400;
+
+  int lives = 3;
 
   /**
    * Called once at the beginning of execution, put your size all in this method
@@ -18,17 +25,20 @@ public class Sketch extends PApplet {
    * values here i.e background, stroke, fill etc.
    */
   public void setup() {
-    background(255);
+    imgBackground = loadImage("background.png");
+    imgShip = loadImage("ship.png");
+    imgLives = loadImage("lives.png");
+
+    background(imgBackground);
   }
 
   /**
    * Called repeatedly, anything drawn to the screen goes here
    */
   public void draw() {
-	  background(255);
-
-    fill(0, 0, 139); // Blue
-    rect(playerX, playerY, 25, 25); // Draws the player
+	  background(imgBackground);
+    
+    image(imgShip, playerX, playerY);
 
      // player boundries
     if (playerX < 0) {
@@ -37,13 +47,23 @@ public class Sketch extends PApplet {
     if (playerY < 0) {
       playerY = 0;
     }
-    if (playerX > width-25) {
-      playerX = width-25;
+    if (playerX > width-100) {
+      playerX = width-100;
     }
-    if (playerY > height-25) {
-      playerY = height-25;
+    if (playerY > height-100) {
+      playerY = height-100;
     }
 
+    /*
+    if (lives == 3) {
+      
+    }
+
+    image(imgLives, 755, 795);
+    image(imgLives, 770, 795);
+    image(imgLives, 785, 795);
+    */
+    
   }
   
   // other methods down here
