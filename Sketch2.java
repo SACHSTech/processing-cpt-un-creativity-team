@@ -12,7 +12,15 @@ public class Sketch2 extends PApplet {
 	int playerX = 200;
   int playerY = 400;
 
+  boolean upPressed;
+  boolean downPressed;
+  boolean leftPressed;
+  boolean rightPressed;
+
   int lives = 5;
+
+  float[] bulletX = new float[25];
+  boolean[] boolBulletVis = new boolean[25];
 
   /*
   Screen 1 - Main menu (default)
@@ -29,6 +37,13 @@ public class Sketch2 extends PApplet {
   public void settings() {
 	   // screen size
     size(800, 800);
+
+    for (int i = 0; i < bulletX.length; i++) { 
+      bulletX[i] = random(width);
+      boolBulletVis[i] = true;
+      bulletX[i] += width;
+    }
+
   }
 
   /** 
@@ -51,18 +66,25 @@ public class Sketch2 extends PApplet {
   public void draw() {
 	  if (screen == 1) {
       mainMenu();
+
     }
     if (screen == 2) {
       difficultyChooser();
+
     }
     if (screen == 3) {
       mainGame();
+
+      bulletRain();
+
     }
     if (screen == 4) {
       gameOver();
+
     }
     if (screen == 5) {
       settingsMenu();
+      
     }
     
   }
@@ -75,19 +97,39 @@ public class Sketch2 extends PApplet {
   public void keyPressed() {
      // Shift the player
     if (key == 'w') {
-      playerY-=20; // Up
+      upPressed = true; // Up
     }
     if (key == 's') {
-      playerY+=20; // Down
+      downPressed = true; // Down
     }
     if (key == 'a') {
-      playerX-=20; // Left
+      leftPressed = true; // Left
     }
     if (key == 'd') {
-      playerX+=20; // Right
+      rightPressed = true; // Right
     }
    
  }
+
+  /**
+    * Detects if a key on the keyboard is released
+    */
+    public void keyReleased() {
+      // Shift the player
+    if (key == 'w') {
+      upPressed = false; // Up
+    }
+    if (key == 's') {
+      downPressed = false; // Down
+    }
+    if (key == 'a') {
+      leftPressed = false; // Left
+    }
+    if (key == 'd') {
+      rightPressed = false; // Right
+    }
+    
+  }
 
  public void mainMenu() {
   background(imgBackground2);
@@ -163,7 +205,6 @@ public class Sketch2 extends PApplet {
     text("EXIT", 55, 545);
   }
   
-
 
  }
 
@@ -267,12 +308,24 @@ public class Sketch2 extends PApplet {
   }
   
 
-
  }
 
  public void mainGame() {
   background(imgBackground);
-    
+  
+  if (upPressed == true) {
+    playerY-=5;
+  }
+  if (downPressed == true) {
+    playerY+=5;
+  }
+  if (leftPressed == true) {
+    playerX-=5;
+  }
+  if (rightPressed == true) {
+    playerX+=5;
+  }
+
   image(imgShip, playerX, playerY);
 
    // player boundries
@@ -316,7 +369,7 @@ public class Sketch2 extends PApplet {
     image(imgLives, 740, 10);
   }
   else if (lives == 0) {
-    screen = 3;
+    screen = 4;
   }
 
  }
@@ -337,7 +390,7 @@ public class Sketch2 extends PApplet {
     text("RETRY", 55, 345);
 
     if (mousePressed == true) {
-      screen = 4;
+      screen = 2;
     }
   }
   else {
@@ -403,6 +456,37 @@ public class Sketch2 extends PApplet {
     text("<--", 10, 50);
   }
   
+
+}
+
+public void bulletRain() {
+  for (int i = 0; i < bulletX.length; i++) { 
+    if (lives > 0) {
+      float bulletY = width * i / bulletX.length;
+
+      if (boolBulletVis[i]) { // Draws the snowballs if it is supposed to be visible
+        fill(220); // White
+        ellipse(bulletX[i], bulletY, 25, 25);
+      }
+
+      bulletX[i] -= 2;
+
+      if (bulletX[i] < -12.5) {
+        bulletX[i] = width;
+      }
+
+      if (playerX+50 >= bulletX[i]-12.5 && playerX+50 <= bulletX[i]+12.5 && playerY+50 >= bulletY-12.5 && playerY+50 <= bulletY+12.5 && boolBulletVis[i] == true) {
+        lives -= 1;
+        boolBulletVis[i] = false;
+      }
+
+      if (mouseX >= bulletY-12.5 && mouseX <= bulletY+12.5 && mouseY >= bulletX[i]-12.5 && mouseY <= bulletX[i]+12.5 && mousePressed == true) {
+        boolBulletVis[i] = false;
+      }
+      
+    }
+
+  }
 
 }
   
