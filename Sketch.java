@@ -1,5 +1,6 @@
 import processing.core.PApplet;
 import processing.core.PImage;
+import java.util.Random;
 
 public class Sketch extends PApplet {
 
@@ -17,6 +18,8 @@ public class Sketch extends PApplet {
   boolean leftPressed;
   boolean rightPressed;
 
+  Random  myRandom = new Random();
+
   int lives = 5;
 
   float[] bulletX = new float[25];
@@ -28,6 +31,9 @@ public class Sketch extends PApplet {
 
   boolean lifeLost = false;
 
+  int timer = 0;
+  int timeSave;
+
   /*
   Screen 1 - Main menu (default)
   Screen 2 - Difficulty chooser 
@@ -35,7 +41,7 @@ public class Sketch extends PApplet {
   Screen 4 - Game over
   Screen 5 - Settings menu
   */
-  int screen = 1;
+  int screen = 3;
 
   /**
    * Called once at the beginning of execution, put your size all in this method
@@ -80,6 +86,19 @@ public class Sketch extends PApplet {
     }
     if (screen == 3) {
       mainGame();
+      
+      timer++;
+      System.out.println(timer);
+      
+      /*
+      if (timer <= 2000) {
+        bulletRain();
+      }
+      else if (timer > 2000) {
+        areaAvoid();
+      }
+      */
+      
 
       //bulletRain();
       areaAvoid();
@@ -514,17 +533,37 @@ public void bulletRain() {
 }
 
 public void areaAvoid() {
+  //avoidAreaNum = myRandom.nextInt((3 - 1) + 1) + 1;
+  
+
   if (avoidAreaNum == 1) {
-    fill(255, 0, 0);
-    rect(0, 0, width, (800/3));
+    if (timer >= 200 && timer < 300) {
+      fill(255); // White
+      textSize(75);
+      text("!", 750, (800/3)-((800/3)/2));
+    }
+    else if (timer >= 300 && timer < 400) {
+      fill(255, 0, 0); // Red
+      rect(0, 0, width, (800/3));
+    }
+    else if (timer >= 400) {
+      timeSave = timer;
+    }
+
   }
   if (avoidAreaNum == 2) {
-    fill(255, 0, 0);
+    fill(255, 0, 0); // Red
     rect(0, (800/3), width, (800/3));
+    fill(255); // White
+    textSize(75);
+    text("!", 750, 395);
   }
   if (avoidAreaNum == 3) {
-    fill(255, 0, 0);
+    fill(255, 0, 0); // Red
     rect(0, (800/3)*2, width, (800/3));
+    fill(255); // White
+    textSize(75);
+    text("!", 750, ((800/3)-((800/3)/2)+(800/3)*2));
   }
 
 }
