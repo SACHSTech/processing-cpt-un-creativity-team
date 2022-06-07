@@ -22,6 +22,12 @@ public class Sketch extends PApplet {
   float[] bulletX = new float[25];
   boolean[] boolBulletVis = new boolean[25];
 
+  boolean laserCannon = false;
+
+  int avoidAreaNum = 1; // 1-3
+
+  boolean lifeLost = false;
+
   /*
   Screen 1 - Main menu (default)
   Screen 2 - Difficulty chooser 
@@ -75,8 +81,8 @@ public class Sketch extends PApplet {
     if (screen == 3) {
       mainGame();
 
-      bulletRain();
-
+      //bulletRain();
+      areaAvoid();
     }
     if (screen == 4) {
       gameOver();
@@ -95,18 +101,23 @@ public class Sketch extends PApplet {
   * Detects if a key on the keyboard is clicked
   */
   public void keyPressed() {
-     // Shift the player
-    if (key == 'w') {
-      upPressed = true; // Up
-    }
-    if (key == 's') {
-      downPressed = true; // Down
-    }
-    if (key == 'a') {
-      leftPressed = true; // Left
-    }
-    if (key == 'd') {
-      rightPressed = true; // Right
+    if (screen == 3) {
+      // Shift the player
+      if (key == 'w') {
+        upPressed = true; // Up
+      }
+      if (key == 's') {
+        downPressed = true; // Down
+      }
+      if (key == 'a') {
+        leftPressed = true; // Left
+      }
+      if (key == 'd') {
+        rightPressed = true; // Right
+      }
+      if (key == 'e') {
+        laserCannon = true;
+      }
     }
    
  }
@@ -115,18 +126,23 @@ public class Sketch extends PApplet {
     * Detects if a key on the keyboard is released
     */
     public void keyReleased() {
-      // Shift the player
-    if (key == 'w') {
-      upPressed = false; // Up
-    }
-    if (key == 's') {
-      downPressed = false; // Down
-    }
-    if (key == 'a') {
-      leftPressed = false; // Left
-    }
-    if (key == 'd') {
-      rightPressed = false; // Right
+    if (screen == 3) {
+        // Shift the player
+      if (key == 'w') {
+        upPressed = false; // Up
+      }
+      if (key == 's') {
+        downPressed = false; // Down
+      }
+      if (key == 'a') {
+        leftPressed = false; // Left
+      }
+      if (key == 'd') {
+        rightPressed = false; // Right
+      }
+      if (key == 'e') {
+        laserCannon = false;
+      }
     }
     
   }
@@ -328,6 +344,13 @@ public class Sketch extends PApplet {
 
   image(imgShip, playerX, playerY);
 
+  if (laserCannon == true && (upPressed == false && downPressed == false && leftPressed == false && rightPressed == false)) {
+    fill(0, 255, 0); // Green
+    noStroke();
+    rect(playerX+100, playerY+45, (width/2), 5);
+    stroke(0); // Black
+  }
+
    // player boundries
   if (playerX < 0) {
     playerX = 0;
@@ -469,7 +492,7 @@ public void bulletRain() {
         ellipse(bulletX[i], bulletY, 25, 25);
       }
 
-      bulletX[i] -= 2;
+      bulletX[i] -= 4;
 
       if (bulletX[i] < -12.5) {
         bulletX[i] = width;
@@ -480,12 +503,28 @@ public void bulletRain() {
         boolBulletVis[i] = false;
       }
 
-      if (mouseX >= bulletY-12.5 && mouseX <= bulletY+12.5 && mouseY >= bulletX[i]-12.5 && mouseY <= bulletX[i]+12.5 && mousePressed == true) {
+      if (laserCannon == true && (upPressed == false && downPressed == false && leftPressed == false && rightPressed == false) && playerY+47.5 >= bulletY-12.5 && playerY+47.5 <= bulletY+12.5 && playerX+100+(width/2) >= bulletX[i]) {
         boolBulletVis[i] = false;
       }
       
     }
 
+  }
+
+}
+
+public void areaAvoid() {
+  if (avoidAreaNum == 1) {
+    fill(255, 0, 0);
+    rect(0, 0, width, (800/3));
+  }
+  if (avoidAreaNum == 2) {
+    fill(255, 0, 0);
+    rect(0, (800/3), width, (800/3));
+  }
+  if (avoidAreaNum == 3) {
+    fill(255, 0, 0);
+    rect(0, (800/3)*2, width, (800/3));
   }
 
 }
