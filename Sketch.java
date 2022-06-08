@@ -34,6 +34,8 @@ public class Sketch extends PApplet {
   int timer = 0;
   int timeSave;
 
+  int SecondPhaseNumber = 0;
+
   /*
   Screen 1 - Main menu (default)
   Screen 2 - Difficulty chooser 
@@ -41,7 +43,7 @@ public class Sketch extends PApplet {
   Screen 4 - Game over
   Screen 5 - Settings menu
   */
-  int screen = 3;
+  int screen = 1;
 
   /**
    * Called once at the beginning of execution, put your size all in this method
@@ -90,18 +92,28 @@ public class Sketch extends PApplet {
       timer++;
       System.out.println(timer);
       
-      /*
       if (timer <= 2000) {
         bulletRain();
+        fill(255); // White
+        textSize(35);
+        text("Phase 1/4", 10, 30);
       }
-      else if (timer > 2000) {
+      else if (timer > 2000 && timer <= 4000) {
         areaAvoid();
+        fill(255); // White
+        textSize(35);
+        text("Phase 2/4", 10, 30);
       }
-      */
+      else if (timer > 4000) {
+        //nextphase();
+        fill(255); // White
+        textSize(35);
+        text("Phase 3/4", 10, 30);
+      }
       
 
       //bulletRain();
-      areaAvoid();
+      //areaAvoid();
     }
     if (screen == 4) {
       gameOver();
@@ -134,8 +146,27 @@ public class Sketch extends PApplet {
       if (key == 'd') {
         rightPressed = true; // Right
       }
-      if (key == 'e') {
+      if (key == 'e') { // Laser cannon
         laserCannon = true;
+      }
+      if (keyCode == SHIFT) { // Dash
+        if (upPressed == true) {
+          playerY-=50;
+          upPressed = false;
+        }
+        if (downPressed == true) {
+          playerY+=50;
+          downPressed = false;
+        }
+        if (leftPressed == true) {
+          playerX-=50;
+          leftPressed = false;
+        }
+        if (rightPressed == true) {
+          playerX+=50;
+          rightPressed = false;
+        }
+
       }
     }
    
@@ -432,6 +463,14 @@ public class Sketch extends PApplet {
     text("RETRY", 55, 345);
 
     if (mousePressed == true) {
+      timer = 0;
+      playerX = 200;
+      playerY = 400;
+      upPressed = false;
+      downPressed = false;
+      leftPressed = false;
+      rightPressed = false;
+      SecondPhaseNumber = 0;
       screen = 2;
     }
   }
@@ -444,7 +483,6 @@ public class Sketch extends PApplet {
     text("RETRY", 55, 345);
   }
   
-
 
   if ((mouseX >= 50 && mouseX <= 750) && (mouseY >= 550 && mouseY <= 600)) {
     fill(0, 0, 255); // Blue
@@ -513,7 +551,7 @@ public void bulletRain() {
 
       bulletX[i] -= 4;
 
-      if (bulletX[i] < -12.5) {
+      if (bulletX[i] < -12.5 && timer < 1750) {
         bulletX[i] = width;
       }
 
@@ -536,34 +574,74 @@ public void areaAvoid() {
   //avoidAreaNum = myRandom.nextInt((3 - 1) + 1) + 1;
   
 
-  if (avoidAreaNum == 1) {
-    if (timer >= 200 && timer < 300) {
+  if (avoidAreaNum == 1 && SecondPhaseNumber <= 5) {
+    if (timer > timeSave + 200 && timer < timeSave + 300) {
       fill(255); // White
       textSize(75);
       text("!", 750, (800/3)-((800/3)/2));
     }
-    else if (timer >= 300 && timer < 400) {
+    else if (timer >= timeSave + 300 && timer < timeSave + 400) {
       fill(255, 0, 0); // Red
       rect(0, 0, width, (800/3));
+      if (lifeLost == false && playerY >= 0 && playerY <= (800/3)) {
+        lives--;
+        lifeLost = true;
+      }
+      else if (playerY >= (800/3) && playerY <= height) {
+        lifeLost = false;
+      }
     }
-    else if (timer >= 400) {
+    else if (timer >= timeSave + 400) {
       timeSave = timer;
+      avoidAreaNum = myRandom.nextInt((3 - 1) + 1) + 1;
+      SecondPhaseNumber++;
     }
-
   }
-  if (avoidAreaNum == 2) {
-    fill(255, 0, 0); // Red
-    rect(0, (800/3), width, (800/3));
-    fill(255); // White
-    textSize(75);
-    text("!", 750, 395);
+  if (avoidAreaNum == 2 && SecondPhaseNumber <= 5) {
+    if (timer > timeSave + 200 && timer < timeSave + 300) {
+      fill(255); // White
+      textSize(75);
+      text("!", 750, 395);
+    }
+    else if (timer >= timeSave + 300 && timer < timeSave + 400) {
+      fill(255, 0, 0); // Red
+      rect(0, (800/3), width, (800/3));
+      if (lifeLost == false && playerY >= (800/3) && playerY <= ((800/3)*2)) {
+        lives--;
+        lifeLost = true;
+      }
+      else if (playerY <= (800/3) && playerY >= ((800/3)*2)) {
+        lifeLost = false;
+      }
+    }
+    else if (timer >= timeSave + 400) {
+      timeSave = timer;
+      avoidAreaNum = myRandom.nextInt((3 - 1) + 1) + 1;
+      SecondPhaseNumber++;
+    }
   }
-  if (avoidAreaNum == 3) {
-    fill(255, 0, 0); // Red
-    rect(0, (800/3)*2, width, (800/3));
-    fill(255); // White
-    textSize(75);
-    text("!", 750, ((800/3)-((800/3)/2)+(800/3)*2));
+  if (avoidAreaNum == 3 && SecondPhaseNumber <= 5) {
+    if (timer > timeSave + 200 && timer < timeSave + 300) {
+      fill(255); // White
+      textSize(75);
+      text("!", 750, ((800/3)-((800/3)/2)+(800/3)*2));
+    }
+    else if (timer >= timeSave + 300 && timer < timeSave + 400) {
+      fill(255, 0, 0); // Red
+      rect(0, (800/3)*2, width, (800/3));
+      if (lifeLost == false && playerY >= ((800/3)*2) && playerY <= height) {
+        lives--;
+        lifeLost = true;
+      }
+      else if (playerY <= ((800/3)*2) && playerY >= height) {
+        lifeLost = false;
+      }
+    }
+    else if (timer >= timeSave + 400) {
+      timeSave = timer;
+      avoidAreaNum = myRandom.nextInt((3 - 1) + 1) + 1;
+      SecondPhaseNumber++;
+    }
   }
 
 }
