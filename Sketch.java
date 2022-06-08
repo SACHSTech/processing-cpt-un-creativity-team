@@ -92,7 +92,6 @@ public class Sketch extends PApplet {
       timer++;
       System.out.println(timer);
       
-
       if (timer <= 2000) {
         bulletRain();
         fill(255); // White
