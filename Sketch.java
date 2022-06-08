@@ -92,23 +92,50 @@ public class Sketch extends PApplet {
       timer++;
       System.out.println(timer);
       
+
       if (timer <= 2000) {
         bulletRain();
         fill(255); // White
         textSize(35);
         text("Phase 1/4", 10, 30);
+        if (timer > 1750 && timer < 2000) {
+          fill(0, 255, 0); // Green
+          textSize(35);
+          text("Phase 1/4", 10, 30);
+        }
       }
       else if (timer > 2000 && timer <= 4000) {
         areaAvoid();
         fill(255); // White
         textSize(35);
         text("Phase 2/4", 10, 30);
+        if (timer > 3750 && timer < 4000) {
+          fill(0, 255, 0); // Green
+          textSize(35);
+          text("Phase 2/4", 10, 30);
+        }
       }
-      else if (timer > 4000) {
+      else if (timer > 4000 && timer <= 6000) {
         //nextphase();
         fill(255); // White
         textSize(35);
         text("Phase 3/4", 10, 30);
+        if (timer > 5750 && timer < 6000) {
+          fill(0, 255, 0); // Green
+          textSize(35);
+          text("Phase 3/4", 10, 30);
+        }
+      }
+      else if (timer > 6000 && timer <= 8000) {
+        //nextphase();
+        fill(255); // White
+        textSize(35);
+        text("Phase 4/4", 10, 30);
+        if (timer > 7750 && timer < 8000) {
+          fill(0, 255, 0); // Green
+          textSize(35);
+          text("Phase 4/4", 10, 30);
+        }
       }
       
 
@@ -571,9 +598,6 @@ public void bulletRain() {
 }
 
 public void areaAvoid() {
-  //avoidAreaNum = myRandom.nextInt((3 - 1) + 1) + 1;
-  
-
   if (avoidAreaNum == 1 && SecondPhaseNumber <= 5) {
     if (timer > timeSave + 200 && timer < timeSave + 300) {
       fill(255); // White
