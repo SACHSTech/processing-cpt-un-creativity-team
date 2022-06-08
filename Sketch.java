@@ -246,7 +246,6 @@ public class Sketch extends PApplet {
     textSize(50);
     text("PLAY", 55, 345);
   }
-  
 
 
   if ((mouseX >= 50 && mouseX <= 750) && (mouseY >= 400 && mouseY <= 450)) {
