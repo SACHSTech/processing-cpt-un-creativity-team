@@ -8,6 +8,7 @@ public class Sketch extends PApplet {
   PImage imgBackground2;
   PImage imgBackground3;
   PImage imgShip;
+  PImage imgMothership;
   PImage imgLives;
 
 	int playerX = 200;
@@ -35,6 +36,11 @@ public class Sketch extends PApplet {
   int timeSave;
 
   int SecondPhaseNumber = 0;
+
+  int motherX = 800;
+  int motherY = 200;
+  int motherSpeedY = 2;
+  int motherHealth = 2000; // 2000
 
   /*
   Screen 1 - Main menu (default)
@@ -69,6 +75,7 @@ public class Sketch extends PApplet {
     imgBackground2 = loadImage("background2.jpg");
     imgBackground3 = loadImage("background3.gif");
     imgShip = loadImage("ship.png");
+    imgMothership = loadImage("mothership.png");
     imgLives = loadImage("lives.png");
 
     background(0); // Black
@@ -96,50 +103,39 @@ public class Sketch extends PApplet {
         bulletRain();
         fill(255); // White
         textSize(35);
-        text("Phase 1/4", 10, 30);
+        text("Phase 1/3", 10, 30);
         if (timer > 1750 && timer < 2000) {
           fill(0, 255, 0); // Green
           textSize(35);
-          text("Phase 1/4", 10, 30);
+          text("Phase 1/3", 10, 30);
         }
       }
       else if (timer > 2000 && timer <= 4000) {
         areaAvoid();
         fill(255); // White
         textSize(35);
-        text("Phase 2/4", 10, 30);
+        text("Phase 2/3", 10, 30);
         if (timer > 3750 && timer < 4000) {
           fill(0, 255, 0); // Green
           textSize(35);
-          text("Phase 2/4", 10, 30);
+          text("Phase 2/3", 10, 30);
         }
       }
-      else if (timer > 4000 && timer <= 6000) {
-        //nextphase();
+      else if (timer > 4000) {
+        motherShip();
         fill(255); // White
         textSize(35);
-        text("Phase 3/4", 10, 30);
-        if (timer > 5750 && timer < 6000) {
+        text("Phase 3/3", 10, 30);
+        if (motherHealth == 0) {
           fill(0, 255, 0); // Green
           textSize(35);
-          text("Phase 3/4", 10, 30);
+          text("Phase 3/3", 10, 30);
         }
       }
-      else if (timer > 6000 && timer <= 8000) {
-        //nextphase();
-        fill(255); // White
-        textSize(35);
-        text("Phase 4/4", 10, 30);
-        if (timer > 7750 && timer < 8000) {
-          fill(0, 255, 0); // Green
-          textSize(35);
-          text("Phase 4/4", 10, 30);
-        }
-      }
-      
 
       //bulletRain();
       //areaAvoid();
+      //motherShip();
     }
     if (screen == 4) {
       gameOver();
@@ -667,6 +663,49 @@ public void areaAvoid() {
     }
   }
 
+}
+
+public void botWave() {
+  //here
+}
+
+public void motherShip() {
+  image(imgMothership, motherX, motherY);
+  fill(255); // White
+  textSize(50);
+  text(motherHealth + "/2000", 0, 105);
+  if (motherX > 550) {
+    motherX--;
+  }
+  else if (motherX == 550 && motherHealth > 0) {
+    motherY += motherSpeedY;
+    if (motherY <= 45) {
+      motherSpeedY *= -1;
+    }
+    if (motherY >= height-400) {
+      motherSpeedY *= -1;
+    }
+
+  }
+
+  if (laserCannon == true && (upPressed == false && downPressed == false && leftPressed == false && rightPressed == false) && playerY+47.5 >= motherY && playerY+47.5 <= motherY+400 && playerX+100+(width/2) >= motherX) {
+    motherHealth--;
+  }
+
+  /*
+  if (playerX+50 >= bulletX[i]-12.5 && playerX+50 <= bulletX[i]+12.5 && playerY+50 >= bulletY-12.5 && playerY+50 <= bulletY+12.5 && boolBulletVis[i] == true && lifeLost == false) {
+    lives -= 1;
+    lifeLost = true;
+  }
+  else if () {
+    lifeLost = false;
+  }
+  */
+
+  if (motherHealth < 0) {
+    motherHealth = 0;
+  }
+  
 }
   
 }
