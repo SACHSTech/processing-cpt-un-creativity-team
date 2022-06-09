@@ -9,6 +9,7 @@ public class Sketch extends PApplet {
   PImage imgBackground3;
   PImage imgShip;
   PImage imgMothership;
+  PImage imgMothershipDead;
   PImage imgLives;
 
 	int playerX = 200;
@@ -22,6 +23,7 @@ public class Sketch extends PApplet {
   Random  myRandom = new Random();
 
   int lives = 5;
+  int phase = 0;
 
   float[] bulletX = new float[25];
   boolean[] boolBulletVis = new boolean[25];
@@ -40,7 +42,7 @@ public class Sketch extends PApplet {
   int motherX = 800;
   int motherY = 200;
   int motherSpeedY = 2;
-  int motherHealth = 2000; // 2000
+  int motherHealth = 1500; // 1500
 
   /*
   Screen 1 - Main menu (default)
@@ -48,6 +50,7 @@ public class Sketch extends PApplet {
   Screen 3 - Main game
   Screen 4 - Game over
   Screen 5 - Settings menu
+  Screen 6 - Game won
   */
   int screen = 1;
 
@@ -76,6 +79,7 @@ public class Sketch extends PApplet {
     imgBackground3 = loadImage("background3.gif");
     imgShip = loadImage("ship.png");
     imgMothership = loadImage("mothership.png");
+    imgMothershipDead = loadImage("mothershipdead.png");
     imgLives = loadImage("lives.png");
 
     background(0); // Black
@@ -87,20 +91,19 @@ public class Sketch extends PApplet {
   public void draw() {
 	  if (screen == 1) {
       mainMenu();
-
     }
     if (screen == 2) {
       difficultyChooser();
-
     }
     if (screen == 3) {
       mainGame();
       
       timer++;
       System.out.println(timer);
-      
+
       if (timer <= 2000) {
         bulletRain();
+        phase = 1;
         fill(255); // White
         textSize(35);
         text("Phase 1/3", 10, 30);
@@ -112,6 +115,7 @@ public class Sketch extends PApplet {
       }
       else if (timer > 2000 && timer <= 4000) {
         areaAvoid();
+        phase = 2;
         fill(255); // White
         textSize(35);
         text("Phase 2/3", 10, 30);
@@ -123,7 +127,8 @@ public class Sketch extends PApplet {
       }
       else if (timer > 4000) {
         motherShip();
-        fill(255); // White
+        phase = 3;
+        fill(255, 0, 0); // Red
         textSize(35);
         text("Phase 3/3", 10, 30);
         if (motherHealth == 0) {
@@ -139,11 +144,12 @@ public class Sketch extends PApplet {
     }
     if (screen == 4) {
       gameOver();
-
     }
     if (screen == 5) {
       settingsMenu();
-      
+    }
+    if (screen == 6) {
+      gameWon(); 
     }
     
   }
@@ -415,7 +421,7 @@ public class Sketch extends PApplet {
 
   image(imgShip, playerX, playerY);
 
-  if (laserCannon == true && (upPressed == false && downPressed == false && leftPressed == false && rightPressed == false)) {
+  if (laserCannon == true && phase > 1 && (upPressed == false && downPressed == false && leftPressed == false && rightPressed == false)) {
     fill(0, 255, 0); // Green
     noStroke();
     rect(playerX+100, playerY+45, (width/2), 5);
@@ -526,7 +532,66 @@ public class Sketch extends PApplet {
     text("MENU", 55, 595);
   }
   
+ }
 
+ public void gameWon() {
+  background(0, 255, 0);
+
+  fill(0); // Black
+  textSize(75);
+  text("GAME WON!", 25, 150);
+
+  if ((mouseX >= 50 && mouseX <= 750) && (mouseY >= 300 && mouseY <= 350)) {
+    fill(0, 255, 0); // Green
+    rect(50, 300, 700, 50);
+
+    fill(0); // Black
+    textSize(50);
+    text("RETRY", 55, 345);
+
+    if (mousePressed == true) {
+      timer = 0;
+      playerX = 200;
+      playerY = 400;
+      upPressed = false;
+      downPressed = false;
+      leftPressed = false;
+      rightPressed = false;
+      SecondPhaseNumber = 0;
+      screen = 2;
+    }
+  }
+  else {
+    fill(0); // Black
+    rect(50, 300, 700, 50);
+
+    fill(0, 255, 0); // Green
+    textSize(50);
+    text("RETRY", 55, 345);
+  }
+  
+
+  if ((mouseX >= 50 && mouseX <= 750) && (mouseY >= 550 && mouseY <= 600)) {
+    fill(0, 0, 255); // Blue
+    rect(50, 550, 700, 50);
+
+    fill(0); // Black
+    textSize(50);
+    text("MENU", 55, 595);
+
+    if (mousePressed == true) {
+      screen = 1;
+    }
+  }
+  else {
+    fill(0); // Black
+    rect(50, 550, 700, 50);
+
+    fill(0, 0, 255); // Blue
+    textSize(50);
+    text("MENU", 55, 595);
+  }
+  
  }
 
  public void settingsMenu() {
@@ -565,15 +630,26 @@ public void bulletRain() {
     if (lives > 0) {
       float bulletY = width * i / bulletX.length;
 
-      if (boolBulletVis[i]) { // Draws the snowballs if it is supposed to be visible
-        fill(220); // White
+      if (boolBulletVis[i]) { // Draws the bullets if it is supposed to be visible
+        if (phase == 1) {
+          fill(220); // Grey
+        }
+        if (phase == 3) {
+          fill(255, 0, 0); // Red
+        }
         ellipse(bulletX[i], bulletY, 25, 25);
       }
 
       bulletX[i] -= 4;
 
-      if (bulletX[i] < -12.5 && timer < 1750) {
-        bulletX[i] = width;
+      if (bulletX[i] < -12.5) {
+        if (timer < 1750 && phase == 1) {
+          bulletX[i] = width;
+        }
+        if (motherHealth > 0 && phase == 3) {
+          bulletX[i] = random(width);
+          bulletY = width * i / bulletX.length;
+        }
       }
 
       if (playerX+50 >= bulletX[i]-12.5 && playerX+50 <= bulletX[i]+12.5 && playerY+50 >= bulletY-12.5 && playerY+50 <= bulletY+12.5 && boolBulletVis[i] == true) {
@@ -581,7 +657,7 @@ public void bulletRain() {
         boolBulletVis[i] = false;
       }
 
-      if (laserCannon == true && (upPressed == false && downPressed == false && leftPressed == false && rightPressed == false) && playerY+47.5 >= bulletY-12.5 && playerY+47.5 <= bulletY+12.5 && playerX+100+(width/2) >= bulletX[i]) {
+      if (laserCannon == true && phase > 1 && (upPressed == false && downPressed == false && leftPressed == false && rightPressed == false) && playerY+47.5 >= bulletY-12.5 && playerY+47.5 <= bulletY+12.5 && playerX+100+(width/2) >= bulletX[i]) {
         boolBulletVis[i] = false;
       }
       
@@ -592,7 +668,7 @@ public void bulletRain() {
 }
 
 public void areaAvoid() {
-  if (avoidAreaNum == 1 && SecondPhaseNumber <= 5) {
+  if (avoidAreaNum == 1 && SecondPhaseNumber <= 5 && motherHealth > 0) {
     if (timer > timeSave + 200 && timer < timeSave + 300) {
       fill(255); // White
       textSize(75);
@@ -612,10 +688,12 @@ public void areaAvoid() {
     else if (timer >= timeSave + 400) {
       timeSave = timer;
       avoidAreaNum = myRandom.nextInt((3 - 1) + 1) + 1;
-      SecondPhaseNumber++;
+      if (phase == 2 && motherHealth > 0) {
+        SecondPhaseNumber++;
+      }
     }
   }
-  if (avoidAreaNum == 2 && SecondPhaseNumber <= 5) {
+  if (avoidAreaNum == 2 && SecondPhaseNumber <= 5 && motherHealth > 0) {
     if (timer > timeSave + 200 && timer < timeSave + 300) {
       fill(255); // White
       textSize(75);
@@ -635,10 +713,12 @@ public void areaAvoid() {
     else if (timer >= timeSave + 400) {
       timeSave = timer;
       avoidAreaNum = myRandom.nextInt((3 - 1) + 1) + 1;
-      SecondPhaseNumber++;
+      if (phase == 2 && motherHealth > 0) {
+        SecondPhaseNumber++;
+      }
     }
   }
-  if (avoidAreaNum == 3 && SecondPhaseNumber <= 5) {
+  if (avoidAreaNum == 3 && SecondPhaseNumber <= 5 && motherHealth > 0) {
     if (timer > timeSave + 200 && timer < timeSave + 300) {
       fill(255); // White
       textSize(75);
@@ -658,7 +738,9 @@ public void areaAvoid() {
     else if (timer >= timeSave + 400) {
       timeSave = timer;
       avoidAreaNum = myRandom.nextInt((3 - 1) + 1) + 1;
-      SecondPhaseNumber++;
+      if (phase == 2 && motherHealth > 0) {
+        SecondPhaseNumber++;
+      }
     }
   }
 
@@ -669,10 +751,15 @@ public void botWave() {
 }
 
 public void motherShip() {
-  image(imgMothership, motherX, motherY);
+  if (motherHealth == 0) {
+    image(imgMothershipDead, motherX, motherY);
+  }
+  else {
+    image(imgMothership, motherX, motherY);
+  }
   fill(255); // White
   textSize(50);
-  text(motherHealth + "/2000", 0, 105);
+  text(motherHealth + "/1500", 0, 105);
   if (motherX > 550) {
     motherX--;
   }
@@ -687,22 +774,34 @@ public void motherShip() {
 
   }
 
-  if (laserCannon == true && (upPressed == false && downPressed == false && leftPressed == false && rightPressed == false) && playerY+47.5 >= motherY && playerY+47.5 <= motherY+400 && playerX+100+(width/2) >= motherX) {
+  if (laserCannon == true && phase > 1 && (upPressed == false && downPressed == false && leftPressed == false && rightPressed == false) && playerY+47.5 >= motherY && playerY+47.5 <= motherY+400 && playerX+100+(width/2) >= motherX) {
     motherHealth--;
   }
 
-  /*
-  if (playerX+50 >= bulletX[i]-12.5 && playerX+50 <= bulletX[i]+12.5 && playerY+50 >= bulletY-12.5 && playerY+50 <= bulletY+12.5 && boolBulletVis[i] == true && lifeLost == false) {
+  if (playerX+50 >= motherX && playerX+50 <= motherX+100 && playerY+50 >= motherY && playerY+50 <= motherY+100 && motherHealth > 0 && lifeLost == false) {
     lives -= 1;
     lifeLost = true;
   }
-  else if () {
+  else if (playerX+50 <= motherX && playerX+50 >= motherX+100 && playerY+50 <= motherY && playerY+50 >= motherY+100) {
     lifeLost = false;
   }
-  */
+
+  if (motherHealth <= 1000) {
+    bulletRain();
+  }
+  if (motherHealth <= 500) {
+    areaAvoid();
+  }
 
   if (motherHealth < 0) {
     motherHealth = 0;
+  }
+
+  if (motherHealth == 2) {
+    timeSave = timer;
+  }
+  if (motherHealth <= 0 && timer > timeSave + 500) {
+    gameWon();
   }
   
 }
