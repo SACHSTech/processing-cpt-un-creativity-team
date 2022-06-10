@@ -23,7 +23,7 @@ public class Sketch extends PApplet {
   Random  myRandom = new Random();
 
   int lives = 5;
-  int phase = 0;
+  int phase = 0; // 0
 
   float[] bulletX = new float[25];
   boolean[] boolBulletVis = new boolean[25];
@@ -36,6 +36,7 @@ public class Sketch extends PApplet {
 
   int timer = 0;
   int timeSave;
+  int timeSave2;
 
   int SecondPhaseNumber = 0;
 
@@ -97,9 +98,8 @@ public class Sketch extends PApplet {
     }
     if (screen == 3) {
       mainGame();
-      
       timer++;
-      System.out.println(timer);
+      //System.out.println(timer);
 
       if (timer <= 2000) {
         bulletRain();
@@ -480,56 +480,27 @@ public class Sketch extends PApplet {
   fill(0); // Black
   textSize(75);
   text("GAME OVER!", 25, 150);
-
-  if ((mouseX >= 50 && mouseX <= 750) && (mouseY >= 300 && mouseY <= 350)) {
-    fill(0, 255, 0); // Green
-    rect(50, 300, 700, 50);
-
-    fill(0); // Black
-    textSize(50);
-    text("RETRY", 55, 345);
-
-    if (mousePressed == true) {
-      timer = 0;
-      playerX = 200;
-      playerY = 400;
-      upPressed = false;
-      downPressed = false;
-      leftPressed = false;
-      rightPressed = false;
-      SecondPhaseNumber = 0;
-      screen = 2;
-    }
-  }
-  else {
-    fill(0); // Black
-    rect(50, 300, 700, 50);
-
-    fill(0, 255, 0); // Green
-    textSize(50);
-    text("RETRY", 55, 345);
-  }
   
 
   if ((mouseX >= 50 && mouseX <= 750) && (mouseY >= 550 && mouseY <= 600)) {
-    fill(0, 0, 255); // Blue
+    fill(255, 0, 0); // Red
     rect(50, 550, 700, 50);
 
     fill(0); // Black
     textSize(50);
-    text("MENU", 55, 595);
+    text("EXIT", 55, 595);
 
     if (mousePressed == true) {
-      screen = 1;
+      exit();
     }
   }
   else {
     fill(0); // Black
     rect(50, 550, 700, 50);
 
-    fill(0, 0, 255); // Blue
+    fill(255, 0, 0); // Red
     textSize(50);
-    text("MENU", 55, 595);
+    text("EXIT", 55, 595);
   }
   
  }
@@ -540,56 +511,27 @@ public class Sketch extends PApplet {
   fill(0); // Black
   textSize(75);
   text("GAME WON!", 25, 150);
-
-  if ((mouseX >= 50 && mouseX <= 750) && (mouseY >= 300 && mouseY <= 350)) {
-    fill(0, 255, 0); // Green
-    rect(50, 300, 700, 50);
-
-    fill(0); // Black
-    textSize(50);
-    text("RETRY", 55, 345);
-
-    if (mousePressed == true) {
-      timer = 0;
-      playerX = 200;
-      playerY = 400;
-      upPressed = false;
-      downPressed = false;
-      leftPressed = false;
-      rightPressed = false;
-      SecondPhaseNumber = 0;
-      screen = 2;
-    }
-  }
-  else {
-    fill(0); // Black
-    rect(50, 300, 700, 50);
-
-    fill(0, 255, 0); // Green
-    textSize(50);
-    text("RETRY", 55, 345);
-  }
   
 
   if ((mouseX >= 50 && mouseX <= 750) && (mouseY >= 550 && mouseY <= 600)) {
-    fill(0, 0, 255); // Blue
+    fill(255, 0, 0); // Red
     rect(50, 550, 700, 50);
 
     fill(0); // Black
     textSize(50);
-    text("MENU", 55, 595);
+    text("EXIT", 55, 595);
 
     if (mousePressed == true) {
-      screen = 1;
+      exit();
     }
   }
   else {
     fill(0); // Black
     rect(50, 550, 700, 50);
 
-    fill(0, 0, 255); // Blue
+    fill(255, 0, 0); // Red
     textSize(50);
-    text("MENU", 55, 595);
+    text("EXIT", 55, 595);
   }
   
  }
@@ -669,12 +611,12 @@ public void bulletRain() {
 
 public void areaAvoid() {
   if (avoidAreaNum == 1 && SecondPhaseNumber <= 5 && motherHealth > 0) {
-    if (timer > timeSave + 200 && timer < timeSave + 300) {
+    if (timer > timeSave + 150 && timer < timeSave + 200) {
       fill(255); // White
       textSize(75);
       text("!", 750, (800/3)-((800/3)/2));
     }
-    else if (timer >= timeSave + 300 && timer < timeSave + 400) {
+    else if (timer >= timeSave + 200 && timer < timeSave + 250) {
       fill(255, 0, 0); // Red
       rect(0, 0, width, (800/3));
       if (lifeLost == false && playerY >= 0 && playerY <= (800/3)) {
@@ -694,12 +636,12 @@ public void areaAvoid() {
     }
   }
   if (avoidAreaNum == 2 && SecondPhaseNumber <= 5 && motherHealth > 0) {
-    if (timer > timeSave + 200 && timer < timeSave + 300) {
+    if (timer > timeSave + 150 && timer < timeSave + 200) {
       fill(255); // White
       textSize(75);
       text("!", 750, 395);
     }
-    else if (timer >= timeSave + 300 && timer < timeSave + 400) {
+    else if (timer >= timeSave + 200 && timer < timeSave + 250) {
       fill(255, 0, 0); // Red
       rect(0, (800/3), width, (800/3));
       if (lifeLost == false && playerY >= (800/3) && playerY <= ((800/3)*2)) {
@@ -719,12 +661,12 @@ public void areaAvoid() {
     }
   }
   if (avoidAreaNum == 3 && SecondPhaseNumber <= 5 && motherHealth > 0) {
-    if (timer > timeSave + 200 && timer < timeSave + 300) {
+    if (timer > timeSave + 150 && timer < timeSave + 200) {
       fill(255); // White
       textSize(75);
       text("!", 750, ((800/3)-((800/3)/2)+(800/3)*2));
     }
-    else if (timer >= timeSave + 300 && timer < timeSave + 400) {
+    else if (timer >= timeSave + 200 && timer < timeSave + 250) {
       fill(255, 0, 0); // Red
       rect(0, (800/3)*2, width, (800/3));
       if (lifeLost == false && playerY >= ((800/3)*2) && playerY <= height) {
@@ -746,10 +688,6 @@ public void areaAvoid() {
 
 }
 
-public void botWave() {
-  //here
-}
-
 public void motherShip() {
   if (motherHealth == 0) {
     image(imgMothershipDead, motherX, motherY);
@@ -762,6 +700,9 @@ public void motherShip() {
   text(motherHealth + "/1500", 0, 105);
   if (motherX > 550) {
     motherX--;
+    if (motherX == 551) {
+      timeSave2 = timer;
+    }
   }
   else if (motherX == 550 && motherHealth > 0) {
     motherY += motherSpeedY;
@@ -786,11 +727,24 @@ public void motherShip() {
     lifeLost = false;
   }
 
-  if (motherHealth <= 1000) {
+  if (motherHealth <= 1000 || timer >= timeSave2+1000) {
     bulletRain();
   }
-  if (motherHealth <= 500) {
+  if (motherHealth <= 500 || timer >= timeSave2+1500) {
     areaAvoid();
+  }
+  if (timer >= timeSave2+2500) {
+    fill(255); // White
+    textSize(50);
+    text("ULTIMATE READY", 10, 700);
+
+    if (laserCannon == true && phase > 1 && (upPressed == false && downPressed == false && leftPressed == false && rightPressed == false)) {
+      fill(0, 255, 0); // Green
+      noStroke();
+      triangle(playerX+100, playerY+45, playerX+100+width, playerY+45+height, playerX+100+width, playerY+45-height);
+      stroke(0); // Black
+      motherHealth = 0;
+    }
   }
 
   if (motherHealth < 0) {
@@ -801,7 +755,7 @@ public void motherShip() {
     timeSave = timer;
   }
   if (motherHealth <= 0 && timer > timeSave + 500) {
-    gameWon();
+    screen = 6;
   }
   
 }
