@@ -1,4 +1,9 @@
 [![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-c66648af7eb3fe8bc4f294546bfd86ef473780cde1dea487d3c4ff354943c9ae.svg)](https://classroom.github.com/online_ide?assignment_repo_id=7920699&assignment_repo_type=AssignmentRepo)
-# Program Title (edit this)
+# Revenge Earth—4056 (Comp Sci CPT 2022)
 
-Put your program description here.
+Welcome to Revenge Earth—4056. In this interactive space shooter style game where you are taking on the role of a brave space-fighter pilot in the year 4056. 
+
+Your duty is to explore and safely traverse the rocky remains of Earth, find the corrupt aliens and destroy them once and for all. You will pilot your spacecraft using the WASD keys, you also have 2 special features, press E to shoot a laser (be careful it only has a certain range) and press shift to dash around and avoid any oncoming threats. There are 3 phases, the first phase you will be navigating through the rocky remains of Earth, be careful as if any of the meteors hit you, you will lose a life your laser is disabled as it needs to be charged up for the second stage. In the second phase, the aliens will begin sending some defensive shockwave attacks, you will need to avoid the area marked with an exclamation mark before a giant shockwave decimates anything in its path, if you are hit by this shockwave you will lose a life. In the final phase, you are confronted by the alien mothership, they will attack with more shockwaves and giant laser bullets. Once you destroy the mothership you have successfully avenged your home planet and saved whatever remains of the human race. There are 3 levels to the gameplay, easy which gives you 5 lives, normal gives you 3 lives and hard gives you 1 life. 
+
+Some limitations to our game are a scoring system, you will not receive any points in this game there are different difficulties you can choose from, however. You also cannot flip the direction you are travelling (you can move backwards but you cannot flip the ship around). 
+

@@ -43,14 +43,14 @@ public class Sketch extends PApplet {
   int motherX = 800;
   int motherY = 200;
   int motherSpeedY = 2;
-  int motherHealth = 1500; // 1500
+  int motherHealth = 1000; // 1000
 
   /*
   Screen 1 - Main menu (default)
   Screen 2 - Difficulty chooser 
   Screen 3 - Main game
   Screen 4 - Game over
-  Screen 5 - Settings menu
+  Screen 5 - Help menu
   Screen 6 - Game won
   */
   int screen = 1;
@@ -99,7 +99,9 @@ public class Sketch extends PApplet {
     if (screen == 3) {
       mainGame();
       timer++;
-      //System.out.println(timer);
+      //System.out.println("TIME: " + timer);
+      //if (timeSave != 0) { System.out.println("SAVE1: " + timeSave);}
+      //if (timeSave2 != 0) { System.out.println("SAVE2: " + timeSave2);}
 
       if (timer <= 2000) {
         bulletRain();
@@ -146,7 +148,7 @@ public class Sketch extends PApplet {
       gameOver();
     }
     if (screen == 5) {
-      settingsMenu();
+      helpMenu();
     }
     if (screen == 6) {
       gameWon(); 
@@ -229,8 +231,8 @@ public class Sketch extends PApplet {
   background(imgBackground2);
 
   fill(255); // White
-  textSize(100);
-  text("TITLE", 50, 150);
+  textSize(75);
+  text("Revenge Earth-4056", 25, 150);
 
   if ((mouseX >= 50 && mouseX <= 750) && (mouseY >= 300 && mouseY <= 350)) {
     fill(0, 255, 0); // Green
@@ -260,7 +262,7 @@ public class Sketch extends PApplet {
 
     fill(255); // White
     textSize(50);
-    text("SETTINGS", 55, 445);
+    text("HELP", 55, 445);
 
     if (mousePressed == true) {
       screen = 5;
@@ -272,7 +274,7 @@ public class Sketch extends PApplet {
 
     fill(0, 0, 255); // Blue
     textSize(50);
-    text("SETTINGS", 55, 445);
+    text("HELP", 55, 445);
   }
   
 
@@ -536,12 +538,12 @@ public class Sketch extends PApplet {
   
  }
 
- public void settingsMenu() {
+ public void helpMenu() {
   background(255);
 
   fill(0); // Black
   textSize(75);
-  text("SETTINGS", 25, 150);
+  text("HELP", 25, 150);
 
   if ((mouseX >= 5 && mouseX <= 200) && (mouseY >= 5 && mouseY <= 55)) {
     fill(0); // black
@@ -563,6 +565,19 @@ public class Sketch extends PApplet {
     textSize(50);
     text("<--", 10, 50);
   }
+
+  fill(0); // Black
+  textSize(45);
+  text("W - Up", 25, 225);
+  text("S - Down", 325, 225);
+  text("A - Left", 25, 275);
+  text("D - Right", 325, 275);
+  text("E - Laser cannon (after phase 1)", 25, 325);
+  text("Shift - Dash (temporarily stuns)", 25, 375);
+
+  text("Navigate around obstacles.", 25, 475);
+  text("Survive each phase.", 25, 525);
+  text("Take your Revenge", 25, 575);
   
 
 }
@@ -697,12 +712,10 @@ public void motherShip() {
   }
   fill(255); // White
   textSize(50);
-  text(motherHealth + "/1500", 0, 105);
+  text(motherHealth + "/1000", 0, 105);
   if (motherX > 550) {
     motherX--;
-    if (motherX == 551) {
-      timeSave2 = timer;
-    }
+    timeSave2 = timer;
   }
   else if (motherX == 550 && motherHealth > 0) {
     motherY += motherSpeedY;
@@ -727,10 +740,10 @@ public void motherShip() {
     lifeLost = false;
   }
 
-  if (motherHealth <= 1000 || timer >= timeSave2+1000) {
+  if (motherHealth <= 750 || timer >= timeSave2+1000) {
     bulletRain();
   }
-  if (motherHealth <= 500 || timer >= timeSave2+1500) {
+  if (motherHealth <= 250 || timer >= timeSave2+1500) {
     areaAvoid();
   }
   if (timer >= timeSave2+2500) {
