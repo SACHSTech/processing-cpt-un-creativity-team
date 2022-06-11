@@ -11,6 +11,7 @@ public class Sketch extends PApplet {
   PImage imgMothership;
   PImage imgMothershipDead;
   PImage imgLives;
+  PImage imgStar;
 
 	int playerX = 200;
   int playerY = 400;
@@ -24,6 +25,16 @@ public class Sketch extends PApplet {
 
   int lives = 5;
   int phase = 0; // 0
+  int achivment = 0;
+  boolean fullHealth = true;
+  boolean secretEnding = false;
+  
+  /*
+  1 - Easy
+  2 - Normal
+  3 - Hard 
+  */
+  int difficulty = 0;
 
   float[] bulletX = new float[25];
   boolean[] boolBulletVis = new boolean[25];
@@ -82,6 +93,7 @@ public class Sketch extends PApplet {
     imgMothership = loadImage("mothership.png");
     imgMothershipDead = loadImage("mothershipdead.png");
     imgLives = loadImage("lives.png");
+    imgStar = loadImage("star.png");
 
     background(0); // Black
   }
@@ -152,6 +164,10 @@ public class Sketch extends PApplet {
     }
     if (screen == 6) {
       gameWon(); 
+    }
+
+    if (screen < 1 || screen > 6) {
+      screen = 1;
     }
     
   }
@@ -306,6 +322,10 @@ public class Sketch extends PApplet {
  public void difficultyChooser() {
   background(255);
 
+  if (difficulty >= 1 && difficulty <= 3) {
+    screen = 3;
+  }
+
   fill(0); // Black
   textSize(75);
   text("CHOOSE DIFFICULTY", 25, 150);
@@ -342,6 +362,7 @@ public class Sketch extends PApplet {
 
     if (mousePressed == true) {
       lives = 5;
+      difficulty = 1;
       screen = 3;
     }
   }
@@ -366,6 +387,7 @@ public class Sketch extends PApplet {
     
     if (mousePressed == true) {
       lives = 3;
+      difficulty = 2;
       screen = 3;
     }
   }
@@ -390,6 +412,7 @@ public class Sketch extends PApplet {
 
     if (mousePressed == true) {
       lives = 1;
+      difficulty = 3;
       screen = 3;
     }
   }
@@ -513,6 +536,29 @@ public class Sketch extends PApplet {
   fill(0); // Black
   textSize(75);
   text("GAME WON!", 25, 150);
+
+  image(imgStar, 25, 250);
+  if (fullHealth == true && secretEnding == true) {
+    achivment = 3;
+  }
+  if (fullHealth == false && secretEnding == false) {
+    achivment = 3;
+  }
+  if (fullHealth == true && secretEnding == false) {
+    achivment = 2;
+  }
+  if (fullHealth == false && secretEnding == true) {
+    achivment = 2;
+  }
+
+  if (achivment == 3) {
+    image(imgStar, 185, 250);
+    image(imgStar, 345, 250);
+  }
+  if (achivment == 2) {
+    image(imgStar, 185, 250);
+    //image(imgStar, 345, 250);
+  }
   
 
   if ((mouseX >= 50 && mouseX <= 750) && (mouseY >= 550 && mouseY <= 600)) {
@@ -637,6 +683,7 @@ public void areaAvoid() {
       if (lifeLost == false && playerY >= 0 && playerY <= (800/3)) {
         lives--;
         lifeLost = true;
+        fullHealth = false;
       }
       else if (playerY >= (800/3) && playerY <= height) {
         lifeLost = false;
@@ -662,6 +709,7 @@ public void areaAvoid() {
       if (lifeLost == false && playerY >= (800/3) && playerY <= ((800/3)*2)) {
         lives--;
         lifeLost = true;
+        fullHealth = false;
       }
       else if (playerY <= (800/3) && playerY >= ((800/3)*2)) {
         lifeLost = false;
@@ -687,6 +735,7 @@ public void areaAvoid() {
       if (lifeLost == false && playerY >= ((800/3)*2) && playerY <= height) {
         lives--;
         lifeLost = true;
+        fullHealth = false;
       }
       else if (playerY <= ((800/3)*2) && playerY >= height) {
         lifeLost = false;
@@ -740,13 +789,13 @@ public void motherShip() {
     lifeLost = false;
   }
 
-  if (motherHealth <= 750 || timer >= timeSave2+1000) {
+  if ((motherHealth == 1000 && motherHealth <= 750) || timer >= timeSave2+1000) {
     bulletRain();
   }
-  if (motherHealth <= 250 || timer >= timeSave2+1500) {
+  if ((motherHealth == 1000 && motherHealth <= 250) || timer >= timeSave2+1500) {
     areaAvoid();
   }
-  if (timer >= timeSave2+2500) {
+  if (timer >= timeSave2+2500 && motherHealth > 0) {
     fill(255); // White
     textSize(50);
     text("ULTIMATE READY", 10, 700);
@@ -758,6 +807,7 @@ public void motherShip() {
       stroke(0); // Black
       motherHealth = 0;
     }
+    secretEnding = true;
   }
 
   if (motherHealth < 0) {
