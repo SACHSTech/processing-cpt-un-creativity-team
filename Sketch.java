@@ -13,8 +13,8 @@ public class Sketch extends PApplet {
   PImage imgLives;
   PImage imgStar;
 
-	int playerX = 200;
-  int playerY = 400;
+	int intPlayerX = 200;
+  int intPlayerY = 400;
 
   boolean upPressed;
   boolean downPressed;
@@ -23,9 +23,9 @@ public class Sketch extends PApplet {
 
   Random  myRandom = new Random();
 
-  int lives = 5;
-  int phase = 0; // 0
-  int achivment = 0;
+  int intLives = 5;
+  int intPhase = 0; // 0
+  int intAchievment = 0;
   boolean fullHealth = true;
   boolean secretEnding = false;
   
@@ -41,20 +41,20 @@ public class Sketch extends PApplet {
 
   boolean laserCannon = false;
 
-  int avoidAreaNum = 1; // 1-3
+  int intAvoidAreaNum = 1; // 1-3
 
   boolean lifeLost = false;
 
-  int timer = 0;
-  int timeSave;
-  int timeSave2;
+  int intTimer = 0;
+  int intTimeSave;
+  int intTimeSave2;
 
-  int SecondPhaseNumber = 0;
+  int intSecondPhaseNumber = 0;
 
-  int motherX = 800;
-  int motherY = 200;
-  int motherSpeedY = 2;
-  int motherHealth = 1000; // 1000
+  int intMotherX = 800;
+  int intMotherY = 200;
+  int intMotherSpeedY = 2;
+  int intMotherHealth = 1000; // 1000
 
   /*
   Screen 1 - Main menu (default)
@@ -110,139 +110,137 @@ public class Sketch extends PApplet {
     }
     if (screen == 3) {
       mainGame();
-      timer++;
+      intTimer++;
       //System.out.println("TIME: " + timer);
       //if (timeSave != 0) { System.out.println("SAVE1: " + timeSave);}
       //if (timeSave2 != 0) { System.out.println("SAVE2: " + timeSave2);}
 
-      if (timer <= 2000) {
+      if (intTimer <= 2000) {
         bulletRain();
-        phase = 1;
+        intPhase = 1;
         fill(255); // White
         textSize(35);
         text("Phase 1/3", 10, 30);
-        if (timer > 1750 && timer < 2000) {
+        if (intTimer > 1750 && intTimer < 2000) {
           fill(0, 255, 0); // Green
           textSize(35);
           text("Phase 1/3", 10, 30);
         }
       }
-      else if (timer > 2000 && timer <= 4000) {
+      else if (intTimer > 2000 && intTimer <= 4000) {
         areaAvoid();
-        phase = 2;
+        intPhase = 2;
         fill(255); // White
         textSize(35);
         text("Phase 2/3", 10, 30);
-        if (timer > 3750 && timer < 4000) {
+        if (intTimer > 3750 && intTimer < 4000) {
           fill(0, 255, 0); // Green
           textSize(35);
           text("Phase 2/3", 10, 30);
         }
       }
-      else if (timer > 4000) {
+      else if (intTimer > 4000) {
         motherShip();
-        phase = 3;
+        intPhase = 3;
         fill(255, 0, 0); // Red
         textSize(35);
         text("Phase 3/3", 10, 30);
-        if (motherHealth == 0) {
+        if (intMotherHealth == 0) {
           fill(0, 255, 0); // Green
           textSize(35);
           text("Phase 3/3", 10, 30);
         }
       }
 
-      //bulletRain();
-      //areaAvoid();
-      //motherShip();
     }
-    if (screen == 4) {
+    if (screen == 4) { // Game over screen
       gameOver();
     }
-    if (screen == 5) {
+    if (screen == 5) { // Help screen
       helpMenu();
     }
-    if (screen == 6) {
+    if (screen == 6) { // Game won screen
       gameWon(); 
     }
 
     if (screen < 1 || screen > 6) {
-      screen = 1;
+      screen = 1; // Makes sure screen is within the 1-6 range
     }
     
   }
   
-  // other methods down here
+// Defining other methods 
 
-  /**
-  * Detects if a key on the keyboard is clicked
-  */
-  public void keyPressed() {
-    if (screen == 3) {
-      // Shift the player
-      if (key == 'w') {
-        upPressed = true; // Up
+/**
+* Detects if a key on the keyboard is clicked
+*/
+public void keyPressed() {
+  if (screen == 3) {
+    // Shift the player
+    if (key == 'w') {
+      upPressed = true; // Up
+    }
+    if (key == 's') {
+      downPressed = true; // Down
+    }
+    if (key == 'a') {
+      leftPressed = true; // Left
+     }
+    if (key == 'd') {
+      rightPressed = true; // Right
+    }
+    if (key == 'e') { // Laser cannon
+      laserCannon = true;
+    }
+    if (keyCode == SHIFT) { // Dash
+      if (upPressed == true) {
+        intPlayerY-=100;
+        upPressed = false;
       }
-      if (key == 's') {
-        downPressed = true; // Down
+      if (downPressed == true) {
+        intPlayerY+=100;
+        downPressed = false;
       }
-      if (key == 'a') {
-        leftPressed = true; // Left
+      if (leftPressed == true) {
+       intPlayerX-=100;
+        leftPressed = false;
       }
-      if (key == 'd') {
-        rightPressed = true; // Right
-      }
-      if (key == 'e') { // Laser cannon
-        laserCannon = true;
-      }
-      if (keyCode == SHIFT) { // Dash
-        if (upPressed == true) {
-          playerY-=50;
-          upPressed = false;
-        }
-        if (downPressed == true) {
-          playerY+=50;
-          downPressed = false;
-        }
-        if (leftPressed == true) {
-          playerX-=50;
-          leftPressed = false;
-        }
-        if (rightPressed == true) {
-          playerX+=50;
-          rightPressed = false;
-        }
-
+      if (rightPressed == true) {
+        intPlayerX+=100;
+        rightPressed = false;
       }
     }
-   
+   } 
  }
 
-  /**
-    * Detects if a key on the keyboard is released
-    */
-    public void keyReleased() {
-    if (screen == 3) {
-        // Shift the player
-      if (key == 'w') {
-        upPressed = false; // Up
-      }
-      if (key == 's') {
-        downPressed = false; // Down
-      }
-      if (key == 'a') {
-        leftPressed = false; // Left
-      }
-      if (key == 'd') {
-        rightPressed = false; // Right
-      }
-      if (key == 'e') {
-        laserCannon = false;
-      }
+/**
+* Detects if a key on the keyboard is released
+*/
+  public void keyReleased() {
+  if (screen == 3) {
+       // Shift the player
+    if (key == 'w') {
+      upPressed = false; // Up
     }
-    
+    if (key == 's') {
+      downPressed = false; // Down
+    }
+    if (key == 'a') {
+      leftPressed = false; // Left
+    }
+    if (key == 'd') {
+      rightPressed = false; // Right
+    }
+    if (key == 'e') {
+      laserCannon = false;
+    }
   }
+    
+}
 
+/**
+* This method creates the title screen 
+*/
  public void mainMenu() {
   background(imgBackground2);
 
@@ -258,8 +256,8 @@ public class Sketch extends PApplet {
     textSize(50);
     text("PLAY", 55, 345);
 
-    if (mousePressed == true) {
-      screen = 2;
+    if (mousePressed == true) { 
+      screen = 2; // Changes the screen from main menu to difficulty chooser
     }
   }
   else {
@@ -281,7 +279,7 @@ public class Sketch extends PApplet {
     text("HELP", 55, 445);
 
     if (mousePressed == true) {
-      screen = 5;
+      screen = 5; // Changes the screen from main menu to help menu
     }
   }
   else {
@@ -304,7 +302,7 @@ public class Sketch extends PApplet {
     text("EXIT", 55, 545);
 
     if (mousePressed == true) {
-      exit();
+      exit(); // Quits the program
     }
   }
   else {
@@ -319,11 +317,14 @@ public class Sketch extends PApplet {
 
  }
 
+/**
+* This method creates the difficulty chooser screen where the player can select the difficulty to play the game at
+*/
  public void difficultyChooser() {
   background(255);
 
   if (difficulty >= 1 && difficulty <= 3) {
-    screen = 3;
+    screen = 3; // If the difficulty is already determined from the code it goes right to the main game
   }
 
   fill(0); // Black
@@ -339,7 +340,7 @@ public class Sketch extends PApplet {
     text("<--", 10, 50);
 
     if (mousePressed == true) {
-      screen = 1;
+      screen = 1; // Changes the screen from difficulty chooser to main menu
     }
   }
   else {
@@ -361,9 +362,9 @@ public class Sketch extends PApplet {
     text("EASY (5 Lives)", 55, 295);
 
     if (mousePressed == true) {
-      lives = 5;
+      intLives = 5;
       difficulty = 1;
-      screen = 3;
+      screen = 3; // Changes the screen from difficulty chooser to main game on easy
     }
   }
   else {
@@ -386,9 +387,9 @@ public class Sketch extends PApplet {
     text("NORMAL (3 Lives)", 55, 445);
     
     if (mousePressed == true) {
-      lives = 3;
+      intLives = 3;
       difficulty = 2;
-      screen = 3;
+      screen = 3; // Changes the screen from difficulty chooser to main game on normal
     }
   }
   else {
@@ -411,9 +412,9 @@ public class Sketch extends PApplet {
     text("HARD (1 Life)", 55, 595);
 
     if (mousePressed == true) {
-      lives = 1;
+      intLives = 1;
       difficulty = 3;
-      screen = 3;
+      screen = 3; // Changes the screen from difficulty chooser to main game on hard
     }
   }
   else {
@@ -428,77 +429,83 @@ public class Sketch extends PApplet {
 
  }
 
+/**
+* This method creates all the essiential gameplay functions for the game such as the movement of the ship, the laser cannon, edge detection and lives
+*/
  public void mainGame() {
   background(imgBackground);
   
-  if (upPressed == true) {
-    playerY-=5;
+  if (upPressed == true) { // If up pressed is true shifts the player up
+    intPlayerY-=5;
   }
-  if (downPressed == true) {
-    playerY+=5;
+  if (downPressed == true) { // If down pressed is true shifts the player down
+    intPlayerY+=5;
   }
-  if (leftPressed == true) {
-    playerX-=5;
+  if (leftPressed == true) { // If left pressed is true shifts the player left
+    intPlayerX-=5;
   }
-  if (rightPressed == true) {
-    playerX+=5;
+  if (rightPressed == true) { // If right pressed is true shifts the player right
+    intPlayerX+=5;
   }
 
-  image(imgShip, playerX, playerY);
+  image(imgShip, intPlayerX, intPlayerY); // Renders the player
 
-  if (laserCannon == true && phase > 1 && (upPressed == false && downPressed == false && leftPressed == false && rightPressed == false)) {
+  if (laserCannon == true && intPhase > 1 && (upPressed == false && downPressed == false && leftPressed == false && rightPressed == false)) { // Laser cannon weapon
     fill(0, 255, 0); // Green
     noStroke();
-    rect(playerX+100, playerY+45, (width/2), 5);
+    rect(intPlayerX+100, intPlayerY+45, (width/2), 5);
     stroke(0); // Black
   }
 
-   // player boundries
-  if (playerX < 0) {
-    playerX = 0;
+   // Player boundries - Keeps the player on the screen
+  if (intPlayerX < 0) {
+    intPlayerX = 0;
   }
-  if (playerY < 0) {
-    playerY = 0;
+  if (intPlayerY < 0) {
+    intPlayerY = 0;
   }
-  if (playerX > width-100) {
-    playerX = width-100;
+  if (intPlayerX > width-100) {
+    intPlayerX = width-100;
   }
-  if (playerY > height-100) {
-    playerY = height-100;
+  if (intPlayerY > height-100) {
+    intPlayerY = height-100;
   }
 
 
-  if (lives == 5) {
+  if (intLives == 5) { // Renders 5 hearts
     image(imgLives, 500, 10);
     image(imgLives, 560, 10);
     image(imgLives, 620, 10);
     image(imgLives, 680, 10);
     image(imgLives, 740, 10);
   }
-  else if (lives == 4) {
+  else if (intLives == 4) { // Renders 4 hearts
     image(imgLives, 560, 10);
     image(imgLives, 620, 10);
     image(imgLives, 680, 10);
     image(imgLives, 740, 10);
   }
-  else if (lives == 3) {
+  else if (intLives == 3) { // Renders 3 hearts
     image(imgLives, 620, 10);
     image(imgLives, 680, 10);
     image(imgLives, 740, 10);
   }
-  else if (lives == 2) {
+  else if (intLives == 2) { // Renders 2 hearts
     image(imgLives, 680, 10);
     image(imgLives, 740, 10);
   }
-  else if (lives == 1) {
+  else if (intLives == 1) { // Renders 1 heart
     image(imgLives, 740, 10);
   }
-  else if (lives == 0) {
+  else if (intLives == 0) { // Dead player
     screen = 4;
   }
 
  }
 
+/**
+* This method creates an end screen once the player loses (runs out of lives) 
+*/
  public void gameOver() {
   background(255, 0, 0);
 
@@ -516,7 +523,7 @@ public class Sketch extends PApplet {
     text("EXIT", 55, 595);
 
     if (mousePressed == true) {
-      exit();
+      exit(); // Exits the game from the game over screen
     }
   }
   else {
@@ -530,6 +537,9 @@ public class Sketch extends PApplet {
   
  }
 
+/**
+* This method creates an end screen once the game is won and outputs a certain amount of stars depending on the ending(s) you achieve 
+*/
  public void gameWon() {
   background(0, 255, 0);
 
@@ -537,27 +547,26 @@ public class Sketch extends PApplet {
   textSize(75);
   text("GAME WON!", 25, 150);
 
-  image(imgStar, 25, 250);
-  if (fullHealth == true && secretEnding == true) {
-    achivment = 3;
+  image(imgStar, 25, 250); // One star
+  if (fullHealth == true && secretEnding == true) { // If all 3 achievments are done
+    intAchievment = 3;
   }
-  if (fullHealth == false && secretEnding == false) {
-    achivment = 3;
+  if (fullHealth == false && secretEnding == false) { // If only one achievment is done
+    intAchievment = 1;
   }
-  if (fullHealth == true && secretEnding == false) {
-    achivment = 2;
+  if (fullHealth == true && secretEnding == false) { // If two achievments are done (Keep full health)
+    intAchievment = 2;
   }
-  if (fullHealth == false && secretEnding == true) {
-    achivment = 2;
+  if (fullHealth == false && secretEnding == true) { // If two achievments are done (Secret ending)
+    intAchievment = 2;
   }
 
-  if (achivment == 3) {
-    image(imgStar, 185, 250);
-    image(imgStar, 345, 250);
+  if (intAchievment == 3) { // If all 3 achievments are done
+    image(imgStar, 185, 250); // Two star
+    image(imgStar, 345, 250); // Three star
   }
-  if (achivment == 2) {
-    image(imgStar, 185, 250);
-    //image(imgStar, 345, 250);
+  if (intAchievment == 2) { // If 2 achievments are done
+    image(imgStar, 185, 250); // Two star
   }
   
 
@@ -570,7 +579,7 @@ public class Sketch extends PApplet {
     text("EXIT", 55, 595);
 
     if (mousePressed == true) {
-      exit();
+      exit(); // If exit is pressed from game won screen
     }
   }
   else {
@@ -584,6 +593,9 @@ public class Sketch extends PApplet {
   
  }
 
+/**
+* This method creates a help menu which displays gameplay controls and gameplay objective onto the screen
+*/
  public void helpMenu() {
   background(255);
 
@@ -600,7 +612,7 @@ public class Sketch extends PApplet {
     text("<--", 10, 50);
 
     if (mousePressed == true) {
-      screen = 1;
+      screen = 1; // Goes back to main menu from help menu
     }
   }
   else {
@@ -612,6 +624,7 @@ public class Sketch extends PApplet {
     text("<--", 10, 50);
   }
 
+  // Display gameplay controls on the screen 
   fill(0); // Black
   textSize(45);
   text("W - Up", 25, 225);
@@ -628,39 +641,42 @@ public class Sketch extends PApplet {
 
 }
 
+/**
+* This method creates the earth debris rock that you must avoid in phase 1 and creates the bullets shot out by the mothership in phase 3
+*/
 public void bulletRain() {
   for (int i = 0; i < bulletX.length; i++) { 
-    if (lives > 0) {
+    if (intLives > 0) {
       float bulletY = width * i / bulletX.length;
 
       if (boolBulletVis[i]) { // Draws the bullets if it is supposed to be visible
-        if (phase == 1) {
+        if (intPhase == 1) {
           fill(220); // Grey
         }
-        if (phase == 3) {
+        if (intPhase == 3) {
           fill(255, 0, 0); // Red
         }
-        ellipse(bulletX[i], bulletY, 25, 25);
+        ellipse(bulletX[i], bulletY, 25, 25); // Renders the rocks/bullets
       }
 
-      bulletX[i] -= 4;
+      bulletX[i] -= 4; // Moves the bullet to the left
 
       if (bulletX[i] < -12.5) {
-        if (timer < 1750 && phase == 1) {
+        if (intTimer < 1750 && intPhase == 1) {
           bulletX[i] = width;
         }
-        if (motherHealth > 0 && phase == 3) {
+        if (intMotherHealth > 0 && intPhase == 3) {
           bulletX[i] = random(width);
           bulletY = width * i / bulletX.length;
         }
       }
 
-      if (playerX+50 >= bulletX[i]-12.5 && playerX+50 <= bulletX[i]+12.5 && playerY+50 >= bulletY-12.5 && playerY+50 <= bulletY+12.5 && boolBulletVis[i] == true) {
-        lives -= 1;
+      if (intPlayerX+50 >= bulletX[i]-12.5 && intPlayerX+50 <= bulletX[i]+12.5 && intPlayerY+50 >= bulletY-12.5 && intPlayerY+50 <= bulletY+12.5 && boolBulletVis[i] == true) {
+        intLives -= 1;
         boolBulletVis[i] = false;
       }
 
-      if (laserCannon == true && phase > 1 && (upPressed == false && downPressed == false && leftPressed == false && rightPressed == false) && playerY+47.5 >= bulletY-12.5 && playerY+47.5 <= bulletY+12.5 && playerX+100+(width/2) >= bulletX[i]) {
+      if (laserCannon == true && intPhase > 1 && (upPressed == false && downPressed == false && leftPressed == false && rightPressed == false) && intPlayerY+47.5 >= bulletY-12.5 && intPlayerY+47.5 <= bulletY+12.5 && intPlayerX+100+(width/2) >= bulletX[i]) {
         boolBulletVis[i] = false;
       }
       
@@ -670,155 +686,161 @@ public void bulletRain() {
 
 }
 
+/**
+* This method creates the shockwave attack section of phase 2
+*/
 public void areaAvoid() {
-  if (avoidAreaNum == 1 && SecondPhaseNumber <= 5 && motherHealth > 0) {
-    if (timer > timeSave + 150 && timer < timeSave + 200) {
+  if (intAvoidAreaNum == 1 && intSecondPhaseNumber <= 5 && intMotherHealth > 0) {
+    if (intTimer > intTimeSave + 150 && intTimer < intTimeSave + 200) {
       fill(255); // White
       textSize(75);
-      text("!", 750, (800/3)-((800/3)/2));
+      text("!", 750, (800/3)-((800/3)/2)); // Warning !
     }
-    else if (timer >= timeSave + 200 && timer < timeSave + 250) {
+    else if (intTimer >= intTimeSave + 200 && intTimer < intTimeSave + 250) {
       fill(255, 0, 0); // Red
       rect(0, 0, width, (800/3));
-      if (lifeLost == false && playerY >= 0 && playerY <= (800/3)) {
-        lives--;
+      if (lifeLost == false && intPlayerY >= 0 && intPlayerY <= (800/3)) { // If in shockwave
+        intLives--; // Subtracts one life
         lifeLost = true;
         fullHealth = false;
       }
-      else if (playerY >= (800/3) && playerY <= height) {
+      else if (intPlayerY >= (800/3) && intPlayerY <= height) { // Moves out of shockwave
         lifeLost = false;
       }
     }
-    else if (timer >= timeSave + 400) {
-      timeSave = timer;
-      avoidAreaNum = myRandom.nextInt((3 - 1) + 1) + 1;
-      if (phase == 2 && motherHealth > 0) {
-        SecondPhaseNumber++;
+    else if (intTimer >= intTimeSave + 400) {
+      intTimeSave = intTimer; // Saves time
+      intAvoidAreaNum = myRandom.nextInt((3 - 1) + 1) + 1; // Randomizes next attack
+      if (intPhase == 2 && intMotherHealth > 0) {
+        intSecondPhaseNumber++; // Limits the number of attacks in second pha
       }
     }
   }
-  if (avoidAreaNum == 2 && SecondPhaseNumber <= 5 && motherHealth > 0) {
-    if (timer > timeSave + 150 && timer < timeSave + 200) {
+  if (intAvoidAreaNum == 2 && intSecondPhaseNumber <= 5 && intMotherHealth > 0) {
+    if (intTimer > intTimeSave + 150 && intTimer < intTimeSave + 200) {
       fill(255); // White
       textSize(75);
-      text("!", 750, 395);
+      text("!", 750, 395); // Warning !
     }
-    else if (timer >= timeSave + 200 && timer < timeSave + 250) {
+    else if (intTimer >= intTimeSave + 200 && intTimer < intTimeSave + 250) {
       fill(255, 0, 0); // Red
       rect(0, (800/3), width, (800/3));
-      if (lifeLost == false && playerY >= (800/3) && playerY <= ((800/3)*2)) {
-        lives--;
+      if (lifeLost == false && intPlayerY >= (800/3) && intPlayerY <= ((800/3)*2)) { // If in shockwave
+        intLives--; // Subtracts one life
         lifeLost = true;
         fullHealth = false;
       }
-      else if (playerY <= (800/3) && playerY >= ((800/3)*2)) {
-        lifeLost = false;
+      else if (intPlayerY <= (800/3) && intPlayerY >= ((800/3)*2)) { // Moves out of shockwave
+        lifeLost = false; // Limits the number of attacks in second pha
       }
     }
-    else if (timer >= timeSave + 400) {
-      timeSave = timer;
-      avoidAreaNum = myRandom.nextInt((3 - 1) + 1) + 1;
-      if (phase == 2 && motherHealth > 0) {
-        SecondPhaseNumber++;
+    else if (intTimer >= intTimeSave + 400) {
+      intTimeSave = intTimer; // Saves time
+      intAvoidAreaNum = myRandom.nextInt((3 - 1) + 1) + 1; // Randomizes next attack
+      if (intPhase == 2 && intMotherHealth > 0) {
+        intSecondPhaseNumber++;
       }
     }
   }
-  if (avoidAreaNum == 3 && SecondPhaseNumber <= 5 && motherHealth > 0) {
-    if (timer > timeSave + 150 && timer < timeSave + 200) {
+  if (intAvoidAreaNum == 3 && intSecondPhaseNumber <= 5 && intMotherHealth > 0) {
+    if (intTimer > intTimeSave + 150 && intTimer < intTimeSave + 200) {
       fill(255); // White
       textSize(75);
-      text("!", 750, ((800/3)-((800/3)/2)+(800/3)*2));
+      text("!", 750, ((800/3)-((800/3)/2)+(800/3)*2)); // Warning !
     }
-    else if (timer >= timeSave + 200 && timer < timeSave + 250) {
+    else if (intTimer >= intTimeSave + 200 && intTimer < intTimeSave + 250) {
       fill(255, 0, 0); // Red
       rect(0, (800/3)*2, width, (800/3));
-      if (lifeLost == false && playerY >= ((800/3)*2) && playerY <= height) {
-        lives--;
+      if (lifeLost == false && intPlayerY >= ((800/3)*2) && intPlayerY <= height) { // If in shockwave
+        intLives--; // Subtracts one life
         lifeLost = true;
         fullHealth = false;
       }
-      else if (playerY <= ((800/3)*2) && playerY >= height) {
+      else if (intPlayerY <= ((800/3)*2) && intPlayerY >= height) { // Moves out of shockwave
         lifeLost = false;
       }
     }
-    else if (timer >= timeSave + 400) {
-      timeSave = timer;
-      avoidAreaNum = myRandom.nextInt((3 - 1) + 1) + 1;
-      if (phase == 2 && motherHealth > 0) {
-        SecondPhaseNumber++;
+    else if (intTimer >= intTimeSave + 400) {
+      intTimeSave = intTimer; // Saves time
+      intAvoidAreaNum = myRandom.nextInt((3 - 1) + 1) + 1; // Randomizes next attack
+      if (intPhase == 2 && intMotherHealth > 0) {
+        intSecondPhaseNumber++; // Limits the number of attacks in second pha
       }
     }
   }
 
 }
 
+/**
+* This method creates the mothership portion of phase 3, it displays the mothership, creates boundaries, mothership movement and the secret ending
+*/
 public void motherShip() {
-  if (motherHealth == 0) {
-    image(imgMothershipDead, motherX, motherY);
+  if (intMotherHealth == 0) {
+    image(imgMothershipDead, intMotherX, intMotherY); // Renders the dead mothership
   }
   else {
-    image(imgMothership, motherX, motherY);
+    image(imgMothership, intMotherX, intMotherY); // Renders the mothership
   }
   fill(255); // White
   textSize(50);
-  text(motherHealth + "/1000", 0, 105);
-  if (motherX > 550) {
-    motherX--;
-    timeSave2 = timer;
+  text(intMotherHealth + "/1000", 0, 105);
+  if (intMotherX > 550) { // Moves mothership out from the right of the screen
+    intMotherX--; // Shifts the mothership
+    intTimeSave2 = intTimer; // Saves the time
   }
-  else if (motherX == 550 && motherHealth > 0) {
-    motherY += motherSpeedY;
-    if (motherY <= 45) {
-      motherSpeedY *= -1;
+  else if (intMotherX == 550 && intMotherHealth > 0) {
+    intMotherY += intMotherSpeedY;
+    if (intMotherY <= 45) { // Keeps the mothership within the top bound
+      intMotherSpeedY *= -1;
     }
-    if (motherY >= height-400) {
-      motherSpeedY *= -1;
+    if (intMotherY >= height-400) { // Keeps the mothership within the bottom bound
+      intMotherSpeedY *= -1;
     }
 
   }
 
-  if (laserCannon == true && phase > 1 && (upPressed == false && downPressed == false && leftPressed == false && rightPressed == false) && playerY+47.5 >= motherY && playerY+47.5 <= motherY+400 && playerX+100+(width/2) >= motherX) {
-    motherHealth--;
+  if (laserCannon == true && intPhase > 1 && (upPressed == false && downPressed == false && leftPressed == false && rightPressed == false) && intPlayerY+47.5 >= intMotherY && intPlayerY+47.5 <= intMotherY+400 && intPlayerX+100+(width/2) >= intMotherX) {
+    intMotherHealth--; // If being shot, mother health go down
   }
 
-  if (playerX+50 >= motherX && playerX+50 <= motherX+100 && playerY+50 >= motherY && playerY+50 <= motherY+100 && motherHealth > 0 && lifeLost == false) {
-    lives -= 1;
+  if (intPlayerX+50 >= intMotherX && intPlayerX+50 <= intMotherX+100 && intPlayerY+50 >= intMotherY && intPlayerY+50 <= intMotherY+100 && intMotherHealth > 0 && lifeLost == false) {
+    intLives -= 1; // Takes away a life
     lifeLost = true;
   }
-  else if (playerX+50 <= motherX && playerX+50 >= motherX+100 && playerY+50 <= motherY && playerY+50 >= motherY+100) {
+  else if (intPlayerX+50 <= intMotherX && intPlayerX+50 >= intMotherX+100 && intPlayerY+50 <= intMotherY && intPlayerY+50 >= intMotherY+100) {
     lifeLost = false;
   }
 
-  if ((motherHealth == 1000 && motherHealth <= 750) || timer >= timeSave2+1000) {
-    bulletRain();
+  if ((intMotherHealth == 1000 && intMotherHealth <= 750) || intTimer >= intTimeSave2+1000) {
+    bulletRain(); // After the mothership is below 750 health or after a certain time, bullets start shooting
   }
-  if ((motherHealth == 1000 && motherHealth <= 250) || timer >= timeSave2+1500) {
-    areaAvoid();
+  if ((intMotherHealth == 1000 && intMotherHealth <= 250) || intTimer >= intTimeSave2+1500) {
+    areaAvoid(); // After the mothership is below 250 health or after a certain time, shockwaves attack
   }
-  if (timer >= timeSave2+2500 && motherHealth > 0) {
+  if (intTimer >= intTimeSave2+2500 && intMotherHealth > 0) {
     fill(255); // White
     textSize(50);
-    text("ULTIMATE READY", 10, 700);
+    text("ULTIMATE READY", 10, 700); // Indicates to the player that the ultimate is ready
 
-    if (laserCannon == true && phase > 1 && (upPressed == false && downPressed == false && leftPressed == false && rightPressed == false)) {
+    if (laserCannon == true && intPhase > 1 && (upPressed == false && downPressed == false && leftPressed == false && rightPressed == false)) {
       fill(0, 255, 0); // Green
       noStroke();
-      triangle(playerX+100, playerY+45, playerX+100+width, playerY+45+height, playerX+100+width, playerY+45-height);
+      triangle(intPlayerX+100, intPlayerY+45, intPlayerX+100+width, intPlayerY+45+height, intPlayerX+100+width, intPlayerY+45-height); // Ultimate ability
       stroke(0); // Black
-      motherHealth = 0;
+      intMotherHealth = 0;
     }
-    secretEnding = true;
+    secretEnding = true; // Sets the secret ending to true
   }
 
-  if (motherHealth < 0) {
-    motherHealth = 0;
+  if (intMotherHealth < 0) {
+    intMotherHealth = 0; // Makes sure the mothership health stays at 0 and doesnt go to negatives
   }
 
-  if (motherHealth == 2) {
-    timeSave = timer;
+  if (intMotherHealth == 2) {
+    intTimeSave = intTimer; // Saves the time
   }
-  if (motherHealth <= 0 && timer > timeSave + 500) {
-    screen = 6;
+  if (intMotherHealth <= 0 && intTimer > intTimeSave + 500) {
+    screen = 6; // Sets the screen to the game won screen after the ending
   }
   
 }
