@@ -555,7 +555,7 @@ public void keyPressed() {
   textSize(75);
   text("GAME WON!", 25, 150);
 
-  image(imgStar, 25, 250); // One star
+  //image(imgStar, 25, 250); // One star
   if (fullHealth == true && secretEnding == true) { // If all 3 achievments are done
     intAchievment = 3;
   }
@@ -570,11 +570,16 @@ public void keyPressed() {
   }
 
   if (intAchievment == 3) { // If all 3 achievments are done
+    image(imgStar, 25, 250); // One star
     image(imgStar, 185, 250); // Two star
     image(imgStar, 345, 250); // Three star
   }
   if (intAchievment == 2) { // If 2 achievments are done
+    image(imgStar, 25, 250); // One star
     image(imgStar, 185, 250); // Two star
+  }
+  if (intAchievment == 1) {
+    image(imgStar, 25, 250); //One star
   }
   
 
@@ -682,6 +687,7 @@ public void bulletRain() {
       if (intPlayerX+50 >= bulletX[i]-12.5 && intPlayerX+50 <= bulletX[i]+12.5 && intPlayerY+50 >= bulletY-12.5 && intPlayerY+50 <= bulletY+12.5 && boolBulletVis[i] == true) {
         intLives -= 1;
         boolBulletVis[i] = false;
+        fullHealth = false;
       }
 
       if (laserCannon == true && intPhase > 1 && (upPressed == false && downPressed == false && leftPressed == false && rightPressed == false) && intPlayerY+47.5 >= bulletY-12.5 && intPlayerY+47.5 <= bulletY+12.5 && intPlayerX+100+(width/2) >= bulletX[i]) {
@@ -819,11 +825,11 @@ public void motherShip() {
     lifeLost = false;
   }
 
-  if ((intMotherHealth == 1000 && intMotherHealth <= 750) || intTimer >= intTimeSave2+1000) {
+  if (intMotherHealth <= 750 || (intMotherHealth == 1000 && intTimer >= intTimeSave2+1000)) {
     bulletRain(); // After the mothership is below 750 health or after a certain time, bullets start shooting
   }
-  if ((intMotherHealth == 1000 && intMotherHealth <= 250) || intTimer >= intTimeSave2+1500) {
-    areaAvoid(); // After the mothership is below 250 health or after a certain time, shockwaves attack
+  if (intMotherHealth <= 300 || (intMotherHealth == 1000 && intTimer >= intTimeSave2+1500)) {
+    areaAvoid(); // After the mothership is below 300 health or after a certain time, shockwaves attack
   }
   if (intTimer >= intTimeSave2+2500 && intMotherHealth > 0) {
     fill(255); // White
