@@ -2,6 +2,14 @@ import processing.core.PApplet;
 import processing.core.PImage;
 import java.util.Random;
 
+/** 
+ * This program Sketch.java outputs an interactive space-shooter style game 
+ * by taking in key inputs from the user (WASD) to move around the character and avoid 
+ * as well as destroy oncoming threats (by utilizing "e" to shoot a laser)
+ * @author: Maximilian Schwarzenberg and Garv Choudhry 
+ * 
+ */
+
 public class Sketch extends PApplet {
 
   PImage imgBackground;
@@ -712,7 +720,7 @@ public void areaAvoid() {
       intTimeSave = intTimer; // Saves time
       intAvoidAreaNum = myRandom.nextInt((3 - 1) + 1) + 1; // Randomizes next attack
       if (intPhase == 2 && intMotherHealth > 0) {
-        intSecondPhaseNumber++; // Limits the number of attacks in second pha
+        intSecondPhaseNumber++; // Limits the number of attacks in second phase
       }
     }
   }
